@@ -5,6 +5,7 @@ import random
 import logging
 import threading
 import time
+import getopt,sys
 
 # /* Header on all OpenFlow packets. */
 # struct ofp_header {
@@ -226,11 +227,35 @@ def start_ns(host,port,thread_num):
 
    print thread_num,'connection(s) completed'
 
+
 if __name__=='__main__':
+    # host='127.0.0.2'
+    # port=6633
+    # count = 0
 
+    try:
+      options,args = getopt.getopt(sys.argv[1:],"h:p:n:",["host=","port=","count="])
+    except getopt.GetoptError:
+      sys.exit()
+    
+    for name,value in options:
+      if name in ("-h","--host"):
+        logging.debug('host is {0}'.format(value))
+        host = value
+        
+      if name in ("-p","--ip"):
+        port = int(value)
+        logging.debug('port is {0}'.format(value))
+     
+      if name in ("-n","--port"):
+        count = int(value)
+        logging.debug('count is {0}'.format(value))
+    
     print 'NoSwitch 0.0.1 By Ark'  
+    try:
+        start_ns(host,port,count)
+    except  NameError as e:
+        print 'Parameter Error'
 
-    start_ns('127.0.0.1',6633,1000)
-
-
+    #cmd python NoSwitch.py -h 127.0.0.1  -p 6633  -n 10
    
